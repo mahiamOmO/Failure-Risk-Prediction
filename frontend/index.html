@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>Failure Risk Prediction</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #4a90e2;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+            color: #333;
+            text-align: left;
+        }
+        input, select {
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+        button {
+            padding: 12px;
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Failure Risk Prediction</h1>
+        <form id="predictionForm">
+            <div>
+                <label for="loading">Loading:</label>
+                <input type="number" step="0.01" id="loading" placeholder="Ex: 80.10" required>
+            </div>
+
+            <div>
+                <label for="product_code">Product Code:</label>
+                <select id="product_code">
+                    <option value="A">Product A</option>
+                    <option value="B">Product B</option>
+                    <option value="C">Product C</option>
+                    <option value="D">Product D</option>
+                    <option value="E">Product E</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="attribute_0">Attribute 0 (Material):</label>
+                <select id="attribute_0">
+                    <option value="material_7">Material 7</option>
+                    <option value="material_5">Material 5</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="attribute_1">Attribute 1 (Material):</label>
+                <select id="attribute_1">
+                    <option value="material_8">Material 8</option>
+                    <option value="material_5">Material 5</option>
+                    <option value="material_6">Material 6</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="measurement_0">Measurement 0:</label>
+                <input type="number" id="measurement_0" placeholder="Ex: 7" required>
+            </div>
+
+             <div>
+                <label for="measurement_1">Measurement 1:</label>
+                <input type="number" id="measurement_1" placeholder="Ex: 3" required>
+            </div>
+
+            <div>
+                <label for="measurement_2">Measurement 2:</label>
+                <input type="number" id="measurement_2" placeholder="Ex: 4" required>
+            </div>
+
+            <button type="submit">Check for Failure Risk</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const resultDiv = document.getElementById('result');
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            resultDiv.textContent = "⏳ Processing...";
+            resultDiv.style.color = "blue";
+            submitButton.disabled = true;
+            submitButton.textContent = "Processing...";
+
+            const productCodeMap = { "A": 0, "B": 1, "C": 2, "D": 3, "E": 4 };
+
+            const attributeMap = {
+                material_5: 0,
+                material_6: 1,
+                material_7: 2,
+                material_8: 3
+            };
+
+            // Get and validate input values with proper type conversion
+            const loadingVal = document.getElementById('loading').value.trim();
+            const measurement0Val = document.getElementById('measurement_0').value.trim();
+            const measurement1Val = document.getElementById('measurement_1').value.trim();
+            const measurement2Val = document.getElementById('measurement_2').value.trim();
+
+            // Helper function to safely convert to number
+            const safeParseFloat = (val) => {
+                const parsed = parseFloat(val);
+                return isNaN(parsed) ? 0.0 : parsed;
+            };
+
+            const safeParseInt = (val) => {
+                const parsed = parseInt(val, 10);
+                return isNaN(parsed) ? 0 : parsed;
+            };
+
+            const formData = {
+                product_code: Number(productCodeMap[document.getElementById('product_code').value] ?? 0),
+                loading: safeParseFloat(loadingVal),
+                attribute_0: Number(attributeMap[document.getElementById('attribute_0').value] ?? 0),
+                attribute_1: Number(attributeMap[document.getElementById('attribute_1').value] ?? 0),
+                measurement_0: safeParseInt(measurement0Val),
+                measurement_1: safeParseInt(measurement1Val),
+                measurement_2: safeParseInt(measurement2Val)
+            };
+
+            console.log("Sending data:", formData); // Debug log
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || "Backend error occurred!");
+                }
+
+                if (result.prediction) {
+                    resultDiv.textContent = result.prediction;
+                    resultDiv.style.color = result.status === 1 ? "red" : "green";
+                    resultDiv.style.fontWeight = "bold";
+                    resultDiv.scrollIntoView({ behavior: "smooth" });
+                } else {
+                    throw new Error("Invalid response from server");
+                }
+            } catch (error) {
+                resultDiv.textContent = "❌ " + error.message;
+                resultDiv.style.color = "red";
+                console.error("Error details:", error);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "Check for Failure Risk";
+            }
+        });
+    </script>
+</body>
+</html>
