@@ -158,5 +158,10 @@ python test_model.py
 - Check that model.pkl and preprocessor.pkl files exist in the backend directory
 - Make sure ports 5000 and 8000 are not in use by other applications
 
-### 👩‍💻 Developed by Mahia Momo  
-AI & Machine Learning Enthusiast 
+### 👩‍💻 Developed by  
+**Mahia Momo**  
+AI & Machine Learning Enthusiast  
+
+📧 **Email:** yourname@email.com  
+🔗 **LinkedIn:** https://www.linkedin.com/in/mahiamomo12/  
+💻 **GitHub:** https://github.com/mahiamOmO
