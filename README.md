@@ -162,6 +162,6 @@ python test_model.py
 **Mahia Momo**  
 AI & Machine Learning Enthusiast  
 
-📧 **Email:** yourname@email.com  
+📧 **Email:** mahiamomo12@gmail.com  
 🔗 **LinkedIn:** https://www.linkedin.com/in/mahiamomo12/  
 💻 **GitHub:** https://github.com/mahiamOmO
