@@ -1,6 +1,18 @@
 # Failure Risk Prediction – TPS ML Web App
 This is a Machine Learning web application for predicting failure risk in the Tabular Playground Series (TPS) dataset. The app uses a trained XGBoost model to analyze product data and predict whether a product is safe or at risk of failure.
 
+
+## 🎥 YouTube Video
+
+**Watch the gameplay demo:**
+
+https://github.com/user-attachments/assets/348ff94d-4b7c-4068-892f-f2069a3d8819
+
+
+
+[▶️ Watch on YouTube]([https://youtu.be/j2XHgs4Okes](https://youtu.be/3iSF2MY82EY?si=GVxctMhFrg51VyLj))
+
+
 ## Features
 
 - Web-based interface for inputting product parameters
@@ -8,6 +20,7 @@ This is a Machine Learning web application for predicting failure risk in the Ta
 - Dynamic results based on loading threshold (700+ forces failure)
 - Backend API built with Flask
 - Frontend served via Python HTTP server
+  
 
 ## Technologies Used
 
